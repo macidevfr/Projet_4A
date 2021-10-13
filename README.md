@@ -20,7 +20,7 @@ Nous utiliserons une base de données PostgreSql ou Mysql.
 
 Voici une ébauche du site :
 
-![image-20211013165537612](E:\programmation\PROJET_4A\image-20211013165537612.png)
+![Aucune description disponible.](https://scontent-cdg2-1.xx.fbcdn.net/v/t1.15752-9/243190875_1298246010605636_3773968241045923314_n.png?_nc_cat=108&ccb=1-5&_nc_sid=ae9488&_nc_ohc=fZjPDIr-fT0AX8hO08-&_nc_ht=scontent-cdg2-1.xx&oh=49a2d7849520ef204ee64ea3fbc69e50&oe=618D77E9)
 
 Voici une ébauche du diagramme UML :
 
