@@ -1,5 +1,3 @@
-# Projet_4A
-
 # ToSucceed.com
 
 L'objectif de ce site web est de fournir une plateforme de cours en ligne, allant de l'école primaire au collège.
@@ -22,9 +20,7 @@ Nous utiliserons une base de données PostgreSql ou Mysql.
 
 Voici une ébauche du site :
 
-![image-20211013164735957](C:\Users\Mael Cipriani\AppData\Roaming\Typora\typora-user-images\image-20211013164735957.png)
-
-
+![image-20211013165537612](E:\programmation\PROJET_4A\image-20211013165537612.png)
 
 Voici une ébauche du diagramme UML :
 
