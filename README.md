@@ -1,5 +1,7 @@
 # ToSucceed.com
 
+##Description
+
 L'objectif de ce site web est de fournir une plateforme de cours en ligne, allant de l'école primaire au collège.
 Il contiendra les éléments suivants :
 
@@ -27,6 +29,55 @@ Voici une ébauche du diagramme UML :
 ![Aucune description disponible.](https://scontent-cdg2-1.xx.fbcdn.net/v/t1.15752-9/245163936_595822478225150_5257693332386759412_n.png?_nc_cat=107&ccb=1-5&_nc_sid=ae9488&_nc_ohc=Q3BgBzmbzUwAX9vh5_W&_nc_ht=scontent-cdg2-1.xx&oh=cc629e054275506207a3a5b2133aed3e&oe=618CDCFA)
 
 
+##Diagrammes UML : 
+
+###Définition des cas d’utilisation et diagramme des cas d'utilisation : 
+
+	- Tous les utilisateurs : S’inscrire/Se Connecter
+	
+	
+	- Etudiant :
+		* S’abonner
+		* Consulter cours (si accès)
+			Sélectionner la classe 
+			Sélectionner la matière 
+		* Laisser un avis
+		* Envoyer un message au professeur
+		* Envoyer une question dans la FAQ
+		
+	
+	- Professeur:
+		* Publier du contenu :
+		* Cours
+		* Répondre aux avis 
+		* Répondre aux étudiants en privé
+		* Répondre aux questions de la FAQ  
+	
+	
+	- Administrateur : 
+		* Accès à une page administration du site qui comprend des statistiques
+		* nombre d’étudiants et professeurs inscrits
+		* cours les plus visités, les mieux notés
+		* nombre d’heures passées sur la plateforme par jour…..
+		* Publier Phrase du jour
+		* Possibilité de changer le front et le back du site
+		
+Diagrammes des cas d'utilisation : 
+
+### Définition des classes et Diagrammes des classes:
+
+Liste des classes :
+
+	- Personnes
+	- Admin
+	- Elève
+	- Professeur 
+	- Abonnement
+	- Cours
+	- Commentaire 
+	- Message_du_jour
+
+Diagramme des classes :
 
 
 
