@@ -63,6 +63,7 @@ Voici une ébauche du diagramme UML :
 		* Possibilité de changer le front et le back du site
 		
 Diagrammes des cas d'utilisation : 
+
 <img width="639" alt="Capture d’écran 2021-11-02 à 20 48 52" src="https://user-images.githubusercontent.com/86744698/139962581-ef0ae711-146e-44c4-a9c3-f2657f5d80ad.png">
 
 
