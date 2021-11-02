@@ -2,7 +2,6 @@ package fr.ToSucceed.entities.Personne;
 
 public class Professeur extends Personne {
 
-    int id;
-    boolean accesPlateforme;
+    private boolean accesPlateforme;
 
 }
