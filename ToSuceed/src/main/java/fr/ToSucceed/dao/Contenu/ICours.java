@@ -1,9 +1,9 @@
-package fr.ToSucceed.dao.Personne;
+package fr.ToSucceed.dao.Contenu;
 
 import fr.ToSucceed.dao.Abonnement.Abonnement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface Eleve extends JpaRepository<fr.ToSucceed.entities.Personne.Eleve,Integer> {
+public interface ICours extends JpaRepository<fr.ToSucceed.entities.Contenu.Cours,Integer> {
 }

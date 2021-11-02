@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface Administrateur extends JpaRepository<fr.ToSucceed.entities.Personne.Administrateur,Integer> {
+public interface IEleve extends JpaRepository<fr.ToSucceed.entities.Personne.Eleve,Integer> {
 }
