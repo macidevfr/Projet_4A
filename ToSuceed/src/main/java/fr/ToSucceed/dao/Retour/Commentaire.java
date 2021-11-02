@@ -1,9 +1,9 @@
-package fr.ToSucceed.dao.Personne;
+package fr.ToSucceed.dao.Retour;
 
 import fr.ToSucceed.dao.Abonnement.Abonnement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
-public interface Professeur extends JpaRepository<fr.ToSucceed.entities.Personne.Professeur,Integer> {
+public interface Commentaire extends JpaRepository<fr.ToSucceed.entities.Retour.Commentaire,Integer> {
 }
