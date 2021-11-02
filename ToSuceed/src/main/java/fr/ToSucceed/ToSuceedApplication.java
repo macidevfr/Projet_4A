@@ -2,7 +2,7 @@ package fr.ToSucceed;
 
 
 import fr.ToSucceed.entities.Personne.Personne;
-import fr.ToSucceed.dao.Personne.PersonneRepo;
+import fr.ToSucceed.dao.PersonneRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

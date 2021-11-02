@@ -2,7 +2,7 @@ package fr.ToSucceed.service;
 
 
 import fr.ToSucceed.entities.Personne.Personne;
-import fr.ToSucceed.dao.Personne.PersonneRepo;
+import fr.ToSucceed.dao.PersonneRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

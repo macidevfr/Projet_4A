@@ -1,4 +1,4 @@
-package fr.ToSucceed.dao.Personne;
+package fr.ToSucceed.dao;
 
 import fr.ToSucceed.entities.Personne.Personne;
 import org.springframework.data.jpa.repository.JpaRepository;
