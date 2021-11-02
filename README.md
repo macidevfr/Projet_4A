@@ -64,6 +64,7 @@ Voici une ébauche du diagramme UML :
 		
 Diagrammes des cas d'utilisation : 
 
+
 ### Définition des classes et Diagrammes des classes:
 
 Liste des classes :

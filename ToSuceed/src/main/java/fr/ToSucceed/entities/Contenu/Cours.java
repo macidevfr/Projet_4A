@@ -1,13 +1,10 @@
 package fr.ToSucceed.entities.Contenu;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -16,14 +13,18 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter @Setter
+
 public class Cours {
     @Id
     @GeneratedValue(strategy = AUTO)
-    private int id_cours;
+    private int id;
     private String niveau;
     private String nom;
     private String description;
-    private Date dop;
+    private LocalDate dop;
     private String matiere;
+    @Enumerated(EnumType.STRING)
+    private CoursType type;
 
 }

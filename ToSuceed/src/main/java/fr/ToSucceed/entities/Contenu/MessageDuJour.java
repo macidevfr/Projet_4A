@@ -1,8 +1,6 @@
 package fr.ToSucceed.entities.Contenu;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,12 +12,13 @@ import static javax.persistence.GenerationType.AUTO;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor @Getter
+@Setter
 public class MessageDuJour {
 
     @Id
     @GeneratedValue(strategy = AUTO)
-    private int id_msg;
+    private int id;
     private String titre_msg;
     private String contenu_msg;
 

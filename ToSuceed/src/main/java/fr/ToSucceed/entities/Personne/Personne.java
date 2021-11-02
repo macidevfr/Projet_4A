@@ -1,8 +1,6 @@
 package fr.ToSucceed.entities.Personne;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +15,8 @@ import static javax.persistence.GenerationType.AUTO;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor @Getter
+@Setter
 public class Personne {
 
     @Id
@@ -29,6 +28,7 @@ public class Personne {
     private String prenom;
     private String mail;
     private boolean admin;
+    private boolean accesPlateforme;
     private LocalDate dob;
     private LocalDate doi;
 

@@ -2,7 +2,7 @@ package fr.ToSucceed.service;
 
 
 import fr.ToSucceed.entities.Personne.Personne;
-import fr.ToSucceed.dao.Personne.PersonneRepo;
+import fr.ToSucceed.dao.Personne.IPersonne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Service
 public class PersonneService {
-    private final PersonneRepo personneRepo;
+    private final IPersonne personneRepo;
 
     @Autowired
-    public PersonneService(PersonneRepo personneRepo) {
-        this.personneRepo = personneRepo;
+    public PersonneService(IPersonne IPersonne) {
+        this.personneRepo = IPersonne;
     }
 
     public List<Personne> getPersonnes() {
