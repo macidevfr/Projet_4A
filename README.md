@@ -80,5 +80,6 @@ Liste des classes :
 
 Diagramme des classes :
 
+![image](https://user-images.githubusercontent.com/90780614/139962118-f0fb302a-05fe-488f-93d9-677e020aede1.png)
 
 
