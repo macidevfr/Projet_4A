@@ -49,13 +49,29 @@ public class ToSuceedApplication {
             Personne Mael = new Personne(null,"eleve1","eleve1","mael","cipriani","maelcipriani@gmail.com",true,true, LocalDate.of(2001, Month.JULY, 16),LocalDate.of(2021, Month.NOVEMBER, 02));
             Personne Youssef = new Personne(null,"eleve2","eleve2","youssef","iffri","youssefiffri@gmail.com",true,true, LocalDate.of(2000, Month.MARCH, 23),LocalDate.of(2021, Month.NOVEMBER, 02));
             Personne Wilfried = new Personne(null,"eleve3","eleve3","wilfried","sanon","wilfriedsanon@gmail.com",true,true, LocalDate.of(2000, Month.DECEMBER, 8),LocalDate.of(2021, Month.NOVEMBER, 02));
-            Abonnement abo  = new Abonnement(1,500,365);
+            Abonnement abo  = new Abonnement(1,500,365,"Annuel");
             Commentaire com = new Commentaire(2,LocalDate.of(2001, Month.JULY, 16),"Premier essaie de commentaire");
             Cours math = new Cours(2,"6eme","Conique pour débutant","Prix du meilleur Cours 2021",LocalDate.of(2001, Month.JULY, 16),"Mathematiques",CoursType.PDF );
             MessageDuJour mess = new MessageDuJour(2,"Hello World !","Bienvenu sur ToSuceed");
 
+            Professeur Youcef = new Professeur();
+            Youcef.setLogin("yc1");
+            Youcef.setAccesPlateforme(true);
+            Youcef.setId_personne(5L);
+            Youcef.setDob(LocalDate.of(1980, Month.AUGUST, 16));
+            Youcef.setDoi(LocalDate.of(2021, Month.AUGUST, 20));
+
+            Eleve ELLL = new Eleve();
+            ELLL.setLogin("el01");
+            ELLL.setAccesPlateforme(true);
+            ELLL.setDob(LocalDate.of(2000, Month.JANUARY, 19));
+            ELLL.setDoi(LocalDate.of(1980, Month.AUGUST, 16));
 
 
+
+
+            iProfesseur.save(Youcef);
+            iEleve.save(ELLL);
             iPersonne.save(Mael);
             iPersonne.save(Youssef);
             iPersonne.save(Wilfried);

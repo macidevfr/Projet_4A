@@ -3,7 +3,6 @@ package fr.ToSucceed.ressource;
 import fr.ToSucceed.entities.Contenu.MessageDuJour;
 import fr.ToSucceed.entities.Retour.Commentaire;
 import fr.ToSucceed.service.CommentaireService;
-import fr.ToSucceed.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

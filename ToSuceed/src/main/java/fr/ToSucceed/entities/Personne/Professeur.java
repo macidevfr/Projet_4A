@@ -1,15 +1,14 @@
 package fr.ToSucceed.entities.Personne;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
-@Data
 @NoArgsConstructor
 @Getter
 @Setter
+@PrimaryKeyJoinColumn(name = "id")
 public class Professeur extends Personne {
 
 
