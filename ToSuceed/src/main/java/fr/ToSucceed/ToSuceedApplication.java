@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -66,6 +67,12 @@ public class ToSuceedApplication {
             ELLL.setAccesPlateforme(true);
             ELLL.setDob(LocalDate.of(2000, Month.JANUARY, 19));
             ELLL.setDoi(LocalDate.of(1980, Month.AUGUST, 16));
+
+//            List<Eleve> stds = new ArrayList<>();
+//            stds.add(ELLL);
+//            abo.setEleve(stds);
+//            com.setCours(math);
+//            com.setEleve(ELLL);
 
 
 

@@ -28,6 +28,14 @@ public class Abonnement {
     private int duree;
     private String titre;
 
+    public Abonnement(int id, double prix, int duree, String titre) {
+        this.id = id;
+        this.prix = prix;
+        this.duree = duree;
+        this.titre = titre;
+    }
+
+
 
     @OneToMany(mappedBy = "abonnement")
     private List<Eleve> eleve = new ArrayList<>();
