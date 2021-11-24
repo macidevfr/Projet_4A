@@ -24,7 +24,7 @@ public class PersonneController {
         return personneService.getPersonnes();
     }
 
-    @PostMapping
+    @PostMapping(path = "save")
     public void addNewPersonne(@RequestBody Personne personne){
         personneService.addNewPersonne(personne);
     }

@@ -21,7 +21,7 @@ public class CommentaireController {
     @GetMapping
     public List<Commentaire> getCommentaires(){return commentaireService.getCommentaires();}
 
-    @PostMapping
+    @PostMapping(path = "save")
     public void addNewCommentaire(@RequestBody Commentaire commentaire){
         commentaireService.addNewCommentaire(commentaire);
     }
