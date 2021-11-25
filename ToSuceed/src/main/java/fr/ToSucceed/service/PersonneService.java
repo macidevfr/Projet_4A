@@ -31,12 +31,12 @@ public class PersonneService {
         personneRepo.save(personne);
     }
 
-    public void deletePersonne(Long studentId){
+    public void deletePersonne(Long personId){
 
-        boolean exists = personneRepo.existsById(studentId);
+        boolean exists = personneRepo.existsById(personId);
         if(!exists){
-            throw new IllegalStateException("student with id "+studentId+" does not exist");
+            throw new IllegalStateException("student with id "+personId+" does not exist");
         }
-        personneRepo.deleteById(studentId);
+        personneRepo.deleteById(personId);
     }
 }

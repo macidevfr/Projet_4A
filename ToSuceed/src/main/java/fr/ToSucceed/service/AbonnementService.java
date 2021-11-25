@@ -2,7 +2,6 @@ package fr.ToSucceed.service;
 
 import fr.ToSucceed.dao.Abonnement.IAbonnement;
 import fr.ToSucceed.entities.Abonnement.Abonnement;
-import fr.ToSucceed.entities.Contenu.MessageDuJour;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

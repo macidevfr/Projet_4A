@@ -21,7 +21,7 @@ public class MessageDuJourController {
     @GetMapping
     public List<MessageDuJour> getMessages(){return messageService.getMessages();}
 
-    @PostMapping
+    @PostMapping(path = "save")
     public void addNewMessage(@RequestBody MessageDuJour messageDuJour){
         messageService.addNewMessage(messageDuJour);
     }
