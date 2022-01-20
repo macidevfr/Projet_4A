@@ -15,9 +15,12 @@ export class UserService {
     return this.http.get<User[]>(`${this.host}/user/list`);
   }
 
-  public addUser(formData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.host}/user/add`, formData);
+  public getUser(username : string) : Observable<HttpResponse<User>>{
+    return this.http.get<HttpResponse<User>>(`${this.host}/user/getbyusername/${username}`);
   }
+    
+
+
 
   public updateUser(formData: FormData): Observable<User> {
     return this.http.post<User>(`${this.host}/user/update`, formData);
@@ -49,6 +52,14 @@ export class UserService {
     return null;
   }
 
+  public addUser(formData: FormData): Observable<User> {
+    return this.http.post<User>(`${this.host}/user/add`, formData);
+  }
+
+  public suscribe(formData: FormData): Observable<User>{
+    return this.http.post<User>(`${this.host}/user/abonnement`, formData);
+  }
+
   public createUserFormData(currentuser : User, user: User, profileImage: File): FormData {
     const formData = new FormData();
     formData.append('currentUsername', currentuser.username);
@@ -74,6 +85,13 @@ export class UserService {
     formData.append('profileImage', profileImage);
     formData.append('isActive', JSON.stringify(user.active));
     formData.append('isNonLocked', JSON.stringify(user.notLocked));
+    return formData;
+  }
+
+  public createAbonnementFormData(currentusername : string, nbMois : number):FormData{
+    const formData = new FormData();
+    formData.append('username', currentusername);
+    formData.append('mois',nbMois.toString());
     return formData;
   }
 

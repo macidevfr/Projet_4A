@@ -20,7 +20,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CoursComponent } from './cours/cours.component';
 import { MessageComponent } from './message/message.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AbonnementComponent } from './abonnement/abonnement.component';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { CommonModule } from '@angular/common';
     UserComponent,
     AccueilComponent,
     CoursComponent, 
-    MessageComponent
+    MessageComponent,
+    AbonnementComponent
   ],
   imports: [
     BrowserModule,
@@ -43,8 +46,9 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule
   
   ],
-  providers: [NotificationService, AuthenticationGuard, AuthenticationService, UserService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],
+  providers: [BnNgIdleService,NotificationService, AuthenticationGuard, AuthenticationService, UserService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {provide : LocationStrategy, useClass: HashLocationStrategy} ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

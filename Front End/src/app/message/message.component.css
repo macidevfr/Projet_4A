@@ -266,7 +266,17 @@
         height: 300px;
         overflow-x: auto
     }
+
+    .input-group-prepend{
+        display: none;
+    }
 }
+
+.navbar-toggler{
+    display: none;
+
+}
+
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
     .chat-app .chat-list {
@@ -289,3 +299,30 @@
         overflow-x: auto
     }
 }
+
+@media screen and (max-width:767px) {
+
+    nav{
+            display: none;
+    }
+    nav a{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+        
+    .navbar-toggler{
+        display: block;
+    
+    }
+    #barre{
+        background-color: #161c2d;
+    }
+    #navbartoggle{
+        background-color: #161c2d;
+    
+    }
+    
+    }

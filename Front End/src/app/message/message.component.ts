@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { NotificationType } from '../enum/notification-type.enum';
 import {Message } from '../model/message';
 import { User } from '../model/user';
@@ -22,10 +22,12 @@ export class MessageComponent implements OnInit {
   public user : User;
   public refreshing: boolean;
   public listusers : User[];
-  public messages : Message[];
+  public messages : Message[] = [];
   private subscriptions: Subscription[] = [];
   public test: boolean;
   public personnes : Array<User>;
+  public personnes2 : Array<User>;
+  public isOnPage : boolean;
   public selectedUser : User;
   public filteredMessages : Message[];
   public selectedIndex : number = 0;
@@ -42,12 +44,15 @@ export class MessageComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     this.scrollToBottom();
 
     this.user = this.authenticationService.getUserFromLocalCache();
     this.getUsers(true);
-    this.setForm();
+    
     this.getMessages(true);
+    this.isOnPage = true;
     this.dropdownSettings = {
       singleSelection: true,
       idField: 'userId',      
@@ -58,6 +63,16 @@ export class MessageComponent implements OnInit {
 
       
     };
+    this.subscriptions.push(
+
+    interval(1000).subscribe(val => {
+      if (!this.refreshing) {
+        let tab = this.messages.filter(x=>x.expediteur===this.personnes[0] && x.readen===false);
+        if (tab.length>0){this.getMessages(true);}
+        else {this.getMessages(false);}
+         
+      }
+   }))
 
 
 
@@ -81,24 +96,35 @@ export class MessageComponent implements OnInit {
               
   }
 
-  public onLogOut(): void {
+  public onLogOut(){
+    const formData = this.authenticationService.createLogoutFormData(this.user.username);
+
+    this.authenticationService.logout(formData).subscribe(
+      (Response : User) =>{
+        
+      }
+    );
     this.authenticationService.logOut();
-    this.router.navigate(['/login']);
-    this.sendNotification(NotificationType.SUCCESS, `You've been successfully logged out`);
-  }
+    this.router.navigateByUrl("/login");
+    this.sendNotification(NotificationType.SUCCESS, `Vous avez été déconnecté correctement.`);
+    }
 
   public getMessages(showNotification: boolean): void {
+    this.refreshing = true;
     this.subscriptions.push(
       this.messageService.getMessagesByUser(this.user.username).subscribe(
-        (response : any) => {
-          this.messageService.addMessagesToLocalCache(response);
+        (response : Message[]) => {
+          if (this.messages.length !== response.length){
           this.messages = response;
-          console.log(this.messages);
+        }
+        if (showNotification){          
           this.sortList();          
-          this.refreshing = false;
+        }
           if (this.personnes.length>0 && showNotification){
             this.selectUser(this.personnes[0]);
           }
+          this.refreshing = false;
+
           
         },
         (errorResponse: HttpErrorResponse) => {
@@ -123,10 +149,8 @@ export class MessageComponent implements OnInit {
     this.subscriptions.push(
       this.userService.getUsers().subscribe(
         (response: User[]) => {
-          this.userService.addUsersToLocalCache(response);
           this.listusers = response;
           this.listusers = this.listusers.filter(x=>x.username!==this.user.username)
-          console.log(this.listusers);
           this.refreshing = false;
           
         },
@@ -162,26 +186,24 @@ export class MessageComponent implements OnInit {
       }
     })
     this.personnes = salut;
+    this.personnes2 = salut;
 
-    console.log(this.personnes);
   }
 
 
   selectUser(user : User){
     this.selectedUser = user;
-    this.filteredMessages = this.messages.filter(x=>(x.destinataire.username===user.username||x.expediteur.username===user.username))
+    this.filteredMessages = this.messages.filter(x=>(x.destinataire.username===user.username||x.expediteur.username===user.username)).reverse();
     console.log(this.filteredMessages);
-
     this.messages.forEach(element => {
       if (element.expediteur.username===user.username){
           this.messageService.readMessage(element.id).subscribe(
             (Response : Message)=>{
-              console.log(Response);
             }
     );        
       }      
     });
-    this.getMessages(false);
+    
   }
 
   setIndex(index : number){
@@ -204,7 +226,6 @@ export class MessageComponent implements OnInit {
         }
       )
       );
-      console.log(this.messages);
       this.scrollToBottom();
 
 
@@ -223,11 +244,7 @@ export class MessageComponent implements OnInit {
     this.clickButton('nouveau-chat');
   }
 
-  public setForm() {
-    this.formGroup = new FormGroup({
-      name: new FormControl(this.listusers, Validators.required),
-    });
-  }
+  
 
   private clickButton(buttonId: string): void {
     document.getElementById(buttonId).click();
@@ -236,7 +253,7 @@ export class MessageComponent implements OnInit {
 
   public searchUsers(searchTerm: string): void {
     const results: User[] = [];
-    for (const user of this.listusers.filter(x=>x.username!==this.user.username)) {
+    for (const user of this.personnes2.filter(x=>x.username!==this.user.username)) {
       if (user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
           results.push(user);
       }
@@ -259,6 +276,7 @@ export class MessageComponent implements OnInit {
   public hasNewMessages(user : User):boolean{
     let tabtri = this.messages.filter(x=>x.expediteur===user && x.readen!==true)
     if (tabtri.length>0){
+      
       return true;
     }
     else {
@@ -266,8 +284,11 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.isOnPage = false;
   }
 
 }

@@ -24,6 +24,7 @@
     "@ng-select/ng-select": "^8.1.1",
     "angular-filter": "^0.5.17",
     "angular-notifier": "^6.0.1",
+    "bn-ng-idle": "^1.0.1",
     "http": "^0.0.1-security",
     "js": "^0.1.0",
     "ng-multiselect-dropdown": "^0.3.7",
