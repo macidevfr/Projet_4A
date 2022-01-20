@@ -52,14 +52,13 @@ public class ToSucceedApplication {
             user.setNotLocked(true);
             user.setRole(userService.getRoleEnumName("ROLE_SUPER_ADMIN").name());
             user.setAuthorities(userService.getRoleEnumName("ROLE_SUPER_ADMIN").getAuthorities());
-            userRepository.save(user);
+            if(userRepository.findUserByUsername("MACI")==null) userRepository.save(user);
+
 
             MessageDuJour messageDuJour = new MessageDuJour();
             messageDuJour.setUser(userRepository.findUserByUsername("MACI"));
             messageDuJour.setContenu_msg("Être ou ne pas être, telle est la question...");
-            iMessageDuJour.save(messageDuJour);
-
-
+            if (iMessageDuJour.findMessageDuJourById(2)==null) iMessageDuJour.save(messageDuJour);
 
 
 
@@ -71,7 +70,8 @@ public class ToSucceedApplication {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        //corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200","http://13.37.112.147","http://www.tosucceed.site" ,"http://tosucceed.site"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));

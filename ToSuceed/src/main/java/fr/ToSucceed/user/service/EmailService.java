@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -18,25 +20,42 @@ import static javax.mail.Message.RecipientType.TO;
 @Service
 public class EmailService {
 
-    public void sendNewPasswordEmail(String firstName, String password, String email) throws MessagingException {
-        Message message = createEmail(firstName, password, email);
-        SMTPTransport smtpTransport = (SMTPTransport) getEmailSession().getTransport(SIMPLE_MAIL_TRANSFER_PROTOCOL);
-        smtpTransport.connect(GMAIL_SMTP_SERVER, USERNAME, PASSWORD);
-        smtpTransport.sendMessage(message, message.getAllRecipients());
-        smtpTransport.close();
+    public void sendNewPasswordEmail(String firstName, String password, String email) throws MessagingException, UnsupportedEncodingException {
+        Properties props = System.getProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.port", DEFAULT_PORT);
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+
+        String body = String.join(
+                System.getProperty("line.separator"),
+                "<h1>ToSucceed Password</h1>",
+                "<p>Bonjour "+firstName+". Voici votre mot de passe : "+password+".Veuillez le garder confidentiel.</p>"
+        );
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(FROM_EMAIL,"WYM Dev"));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+        msg.setSubject(EMAIL_SUBJECT);
+        msg.setContent(body,"text/html");
+
+        Transport transport = session.getTransport();
+
+        try {
+            //Connectez-vous au serveur SMTP
+            transport.connect(SMTP_HOST, USERNAME, PASSWORD);
+
+            //envoyer un e-mail
+            transport.sendMessage(msg, msg.getAllRecipients());
+        } catch (Exception ex) {
+            System.out.println("Error message: " + ex.getMessage());
+        } finally {
+            transport.close();
+        }
+
     }
 
-    private Message createEmail(String firstName, String password, String email) throws MessagingException {
-        Message message = new MimeMessage(getEmailSession());
-        message.setFrom(new InternetAddress(FROM_EMAIL));
-        message.setRecipients(TO, InternetAddress.parse(email, false));
-        message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
-        message.setSubject(EMAIL_SUBJECT);
-        message.setText("Hello " + firstName + ", \n \n Your new account password is: " + password + "\n \n The Support Team");
-        message.setSentDate(new Date());
-        message.saveChanges();
-        return message;
-    }
 
     private Session getEmailSession() {
         Properties properties = System.getProperties();

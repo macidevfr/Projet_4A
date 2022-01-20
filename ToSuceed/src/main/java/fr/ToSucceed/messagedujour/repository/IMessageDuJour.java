@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface IMessageDuJour extends JpaRepository<MessageDuJour, Integer> {
-    Optional<MessageDuJour> findMessageDuJourById(Integer id);
+    MessageDuJour findMessageDuJourById(Integer id);
 }

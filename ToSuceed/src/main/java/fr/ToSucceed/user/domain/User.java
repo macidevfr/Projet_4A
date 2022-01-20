@@ -1,11 +1,10 @@
 package fr.ToSucceed.user.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import fr.ToSucceed.abonnement.model.Abonnement;
 import fr.ToSucceed.commentaire.model.Commentaire;
 import fr.ToSucceed.cours.model.Cours;
+import fr.ToSucceed.message.model.Message;
 import fr.ToSucceed.messagedujour.model.MessageDuJour;
 import lombok.*;
 
@@ -43,6 +42,7 @@ public class User implements Serializable {
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
+    private boolean isOnline;
     @OneToMany(mappedBy = "user",
                 cascade = CascadeType.ALL,
                 orphanRemoval = true)
@@ -61,6 +61,11 @@ public class User implements Serializable {
             orphanRemoval = true)
     @JsonManagedReference(value = "user-com")
     private List<Commentaire> commentaires;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "user-abo")
+    private Abonnement abonnement;
+
 
     public User(String username, String password, String email) {
         this.username = username;
