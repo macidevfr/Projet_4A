@@ -21,6 +21,7 @@ import javax.mail.MessagingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,6 +37,7 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 public class UserResource extends ExceptionHandling {
     public static final String PASSWORD_RESET = "Le mot de passe a bien été réinitialisé : ";
     public static final String USER_DELETED_SUCCESSFULLY = "l'utilisateur a bien été supprimé";
+    public static final String ABONNEMENT_UPDATED_SUCCESSFULLY = "l'abonnement a bien été enregistré";
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -48,17 +50,38 @@ public class UserResource extends ExceptionHandling {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        authenticate(user.getUsername(), user.getPassword());
-        User loginUser = userService.findUserByUsername(user.getUsername());
+    public ResponseEntity<User> login(@RequestParam("username") String username,
+                                      @RequestParam("password") String password) {
+        authenticate(username, password);
+        User loginUser = userService.findUserByUsername(username);
+        loginUser.setOnline(true);
+        this.userService.save(loginUser);
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<User> logout(@RequestParam("username") String username) {
+        User logoutUser = userService.findUserByUsername(username);
+        logoutUser.setOnline(false);
+        this.userService.save(logoutUser);
+
+        return new ResponseEntity<>(logoutUser, OK);
+    }
+
+    @GetMapping("/getjwt/{username}")
+    public ResponseEntity<User> login(@PathVariable (value = "username") String username) {
+        User loginUser = userService.findUserByUsername(username);
+        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
+        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+        return new ResponseEntity<>(loginUser, jwtHeader, OK);
+    }
+
+
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
-        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
+    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, UnsupportedEncodingException {
+        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername().replaceAll(" ", ""), user.getEmail(), user.getPassword().replaceAll(" ", ""));
         return new ResponseEntity<>(newUser, OK);
     }
 
@@ -70,8 +93,10 @@ public class UserResource extends ExceptionHandling {
                                            @RequestParam("role") String role,
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam("isNonLocked") String isNonLocked,
-                                           @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-        User newUser = userService.addNewUser(firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+                                           @RequestParam(value = "profileImage", required = false) MultipartFile profileImage)
+            throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+        User newUser = userService.addNewUser(firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked),
+                                                Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(newUser, OK);
     }
 
@@ -101,6 +126,12 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(users, OK);
     }
 
+    @GetMapping("/getbyusername/{username}")
+    public ResponseEntity<User> getUserbyUsername(@PathVariable("username") String username){
+        User user = userService.findUserByUsername(username);
+        return new ResponseEntity<>(user, OK);
+    }
+
     @GetMapping("/resetpassword/{username}/{password}")
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable("password") String password, @PathVariable("username") String username) throws MessagingException, EmailNotFoundException {
         userService.resetPassword(password, username);
@@ -118,6 +149,13 @@ public class UserResource extends ExceptionHandling {
     public ResponseEntity<User> updateProfileImage(@RequestParam("username") String username, @RequestParam(value = "profileImage") MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
         User user = userService.updateProfileImage(username, profileImage);
         return new ResponseEntity<>(user, OK);
+    }
+
+    @PostMapping("/abonnement")
+    public ResponseEntity<User> updateAbo(@RequestParam("username") String username, @RequestParam("mois") int nbMois){
+        User user = userService.updateAbonnement(username, nbMois);
+        return new ResponseEntity<>(user, OK);
+
     }
 
     @GetMapping(path = "/image/{username}/{fileName}", produces = IMAGE_JPEG_VALUE)

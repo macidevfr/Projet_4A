@@ -109,6 +109,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>
+                        true
+                    </executable>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,6 +124,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>ToSucceed</finalName>
     </build>
 
 </project>

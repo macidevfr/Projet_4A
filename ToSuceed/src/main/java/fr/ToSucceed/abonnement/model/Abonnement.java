@@ -1,12 +1,13 @@
 package fr.ToSucceed.abonnement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import fr.ToSucceed.user.domain.User;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,12 +25,13 @@ public class Abonnement {
     @Id
     @GeneratedValue(strategy = AUTO)
     private int id;
-    private double prix;
-    private int duree;
-    private String titre;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "Europe/Paris")
+    private LocalDate date_exp;
+    @JsonBackReference(value = "user-abo")
+    @OneToOne(mappedBy = "abonnement")
+    private User user;
 
-
-
-
-
+    public Abonnement(LocalDate date_exp) {
+        this.date_exp = date_exp;
+    }
 }

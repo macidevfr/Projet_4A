@@ -1,5 +1,8 @@
 package fr.ToSucceed.user.service.impl;
 
+import fr.ToSucceed.abonnement.model.Abonnement;
+import fr.ToSucceed.message.model.Message;
+import fr.ToSucceed.message.repository.IMessage;
 import fr.ToSucceed.user.domain.User;
 import fr.ToSucceed.user.domain.UserPrincipal;
 import fr.ToSucceed.user.enumeration.Role;
@@ -27,9 +30,11 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -64,14 +69,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
     private LoginAttemptService loginAttemptService;
     private EmailService emailService;
+    private IMessage iMessage;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService, IMessage iMessage) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
         this.emailService = emailService;
+        this.iMessage = iMessage;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -91,11 +99,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
+    public User register(String firstName, String lastName, String username, String email, String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, UnsupportedEncodingException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
-        String password = generatePassword();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
@@ -109,7 +116,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
         LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName, password, email);
+        //emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
@@ -169,6 +176,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public void save(User user){
+        this.userRepository.save(user);
+    }
+
+    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
@@ -186,9 +198,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void deleteUser(String username) throws IOException {
         User user = userRepository.findUserByUsername(username);
+        List<Message> messages = iMessage.findMessageByExpediteurOrDestinataireOrderByIdDesc(user,user);
+        iMessage.deleteAll(messages);
         Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
         FileUtils.deleteDirectory(new File(userFolder.toString()));
         userRepository.deleteById(user.getId());
+    }
+
+    @Override
+    public User updateAbonnement(String username, int nbMois){
+        User user = this.userRepository.findUserByUsername(username);
+        user.setAbonnement(new Abonnement(LocalDate.now().plusMonths(nbMois)));
+        this.userRepository.save(user);
+        return user;
     }
 
     private void saveProfileImage(User user, MultipartFile profileImage) throws IOException, NotAnImageFileException {
