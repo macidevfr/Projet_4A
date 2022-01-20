@@ -1,3 +1,4 @@
+import { Abonnement } from "./abonnement";
 import { Messagedujour } from "./messagedujour";
 
 export class User {
@@ -15,6 +16,9 @@ export class User {
   public role: string;
   public authorities: [];
   public messagesdujour: Messagedujour;
+  public password : string;
+  public abonnement : Abonnement;
+  public online : boolean;
 
   constructor() {
     this.userId = '';
@@ -31,6 +35,9 @@ export class User {
     this.role = '';
     this.authorities = [];
     this.messagesdujour = null;
+    this.password = '';
+    this.abonnement = null;
+    this.online = false;
   }
 
 }

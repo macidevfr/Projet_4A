@@ -7,6 +7,7 @@ import { NotificationService } from '../service/notification.service';
 import { User } from '../model/user';
 import { NotificationType } from '../enum/notification-type.enum';
 import { HeaderType } from '../enum/header-type.enum';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
               private notificationService: NotificationService) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     if (this.authenticationService.isUserLoggedIn()) {
       this.router.navigateByUrl('/user/management');
     } else {
@@ -28,10 +31,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onLogin(user: User): void {
+  public onLogin(loginForm: NgForm): void {
     this.showLoading = true;
+    const formData = this.authenticationService.createloginFormData(loginForm.value);
     this.subscriptions.push(
-      this.authenticationService.login(user).subscribe(
+      this.authenticationService.login(formData).subscribe(
         (response: HttpResponse<User>) => {
           const token = response.headers.get(HeaderType.JWT_TOKEN);
           this.authenticationService.saveToken(token);

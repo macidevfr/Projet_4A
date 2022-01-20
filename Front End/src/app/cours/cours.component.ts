@@ -38,8 +38,8 @@ export class CoursComponent implements OnInit {
   public stars: string[] = ["1", "2", "3", "4", "5"];
   public selectedValue: string;
   public noteMoyenne : number;
-  filter = { CP: true, CE1: true, CE2: true,
-            MATHS:true, FRANCAIS:true };
+  filter = { CP:false, CE1:false, CE2:false,
+            MATHS:false, FRANCAIS:false, ANGLAIS:false };
 
   dropdownSettings = {};
   dropdownSettings2 = {};
@@ -51,6 +51,8 @@ export class CoursComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     this.user = this.authenticationService.getUserFromLocalCache();
     this.getCours(true);
     
@@ -61,7 +63,6 @@ export class CoursComponent implements OnInit {
     this.subscriptions.push(
       this.coursService.getCours().subscribe(
         (response: Cours[]) => {
-          this.coursService.addCoursToLocalCache(response);
           this.listcours = response;
           this.filterChange();
 
@@ -104,11 +105,17 @@ export class CoursComponent implements OnInit {
   }
 
   public onLogOut(){
+    const formData = this.authenticationService.createLogoutFormData(this.user.username);
+
+    this.authenticationService.logout(formData).subscribe(
+      (Response : User) =>{
+        
+      }
+    );
     this.authenticationService.logOut();
     this.router.navigateByUrl("/login");
     this.sendNotification(NotificationType.SUCCESS, `Vous avez été déconnecté correctement.`);
-    }
-
+  }
   private sendNotification(notificationType: NotificationType, message: string): void {
     if (message) {
       this.notificationService.notify(notificationType, message);
@@ -120,13 +127,37 @@ export class CoursComponent implements OnInit {
   
 
   filterChange() {
-    this.filteredCours = this.listcours.filter(x => 
-       ((x.niveau === 'CP' && this.filter.CP)
-       || (x.niveau === 'CE1' && this.filter.CE1)
-       || (x.niveau === 'CE2' && this.filter.CE2))
-       && ((x.matiere === 'MATHS' && this.filter.MATHS)
-       || (x.matiere === 'FRANCAIS' && this.filter.FRANCAIS))
-    );
+
+    if (this.filter.CP === false && this.filter.CE1 === false && this.filter.CE2 === false && this.filter.MATHS === false && this.filter.FRANCAIS === false && this.filter.ANGLAIS === false){
+      this.filteredCours=this.listcours;
+    }
+    else{
+      if(((this.filter.CP || this.filter.CE1 || this.filter.CE2) && (!this.filter.MATHS && !this.filter.FRANCAIS && !this.filter.ANGLAIS))||((this.filter.MATHS || this.filter.FRANCAIS || this.filter.ANGLAIS) && (!this.filter.CP && !this.filter.CE1 && !this.filter.CE2))){
+        this.filteredCours = this.listcours.filter(x => 
+          ((x.niveau === 'CP' && this.filter.CP)
+          || (x.niveau === 'CE1' && this.filter.CE1)
+          || (x.niveau === 'CE2' && this.filter.CE2))
+          || ((x.matiere === 'MATHS' && this.filter.MATHS)
+          || (x.matiere === 'FRANCAIS' && this.filter.FRANCAIS)
+          || (x.matiere === 'ANGLAIS' && this.filter.ANGLAIS))
+       );
+      }
+
+      else{
+      this.filteredCours = this.listcours.filter(x => 
+        ((x.niveau === 'CP' && this.filter.CP)
+        || (x.niveau === 'CE1' && this.filter.CE1)
+        || (x.niveau === 'CE2' && this.filter.CE2))
+        && ((x.matiere === 'MATHS' && this.filter.MATHS)
+        || (x.matiere === 'FRANCAIS' && this.filter.FRANCAIS)
+        || (x.matiere === 'ANGLAIS' && this.filter.ANGLAIS))
+      
+        );       
+      }
+
+         
+
+    }
   }
 
   public onAddNewCours(coursForm: NgForm): void {

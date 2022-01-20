@@ -15,12 +15,18 @@
 }
 
 #abonnement{
-    background: linear-gradient(#303041 90%,white);
+    background: #303041 ;
     color: white;
     font-family: 'Roboto Slab', serif;
     padding-bottom: 60px;
 
 }
+
+.navbar-toggler{
+    display: none;
+
+}
+
 
 #aboinfos{
     background: #3d3a50;
@@ -50,5 +56,61 @@
 
 .card li{
     margin-top: 15px;
+}
+
+@media screen and (max-width:767px) {
+
+nav{
+        display: none;
+}
+nav a{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+    
+.navbar-toggler{
+    display: block;
+
+}
+#barre{
+    background-color: #161c2d;
+}
+#navbartoggle{
+    background-color: #161c2d;
+
+}
+
+    #accueil{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #messageaccueil{
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+
+    #carddetails{
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    .card{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .dflex{
+        width: 100%;
+    }
+
+    #aboo{
+        width: 100%;
+    }
+    
 }
 

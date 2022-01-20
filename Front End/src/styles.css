@@ -38,9 +38,12 @@ td {
   }
 
   html, body {
-    min-height: 100vh;
+    overflow-y: auto;
+    min-height: 90vh;
     height: auto;
     margin: 0;
+    overflow-x: hidden;
+    
   }
 
   #main{
@@ -78,3 +81,7 @@ td {
 .nav-link:focus{
   color:royalblue;
 }
+
+
+
+

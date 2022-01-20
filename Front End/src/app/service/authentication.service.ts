@@ -16,8 +16,12 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private router:Router) {}
 
-  public login(user: User): Observable<HttpResponse<User>> {
-    return this.http.post<User>(`${this.host}/user/login`, user, { observe: 'response' });
+  public login(formData: FormData): Observable<HttpResponse<User>> {
+    return this.http.post<User>(`${this.host}/user/login`, formData, { observe: 'response' });
+  }
+
+  public logout(formData: FormData): Observable<User> {
+    return this.http.post<User>(`${this.host}/user/logout`, formData);
   }
 
   public register(user: User): Observable<User> {
@@ -25,11 +29,13 @@ export class AuthenticationService {
   }
 
   public logOut(): void {
+    
     this.token = null;
     this.loggedInUsername = null;
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    localStorage.removeItem('users');
+    localStorage.removeItem('users'); 
+    
   }
 
   public saveToken(token: string): void {
@@ -68,4 +74,19 @@ export class AuthenticationService {
     }
   }
 
+  createLogoutFormData(username : string) {
+    const formData = new FormData();
+    formData.append('username', username);
+    
+    
+    return formData;
+  }
+
+  createloginFormData(user : any){
+    const formData = new FormData();
+    formData.append('username', user.username);
+    formData.append('password', user.password);
+    
+    return formData;
+  }
 }

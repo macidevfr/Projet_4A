@@ -20,6 +20,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
               private notificationService: NotificationService) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     if (this.authenticationService.isUserLoggedIn()) {
       this.router.navigateByUrl('/user/management');
     }
@@ -31,8 +33,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.authenticationService.register(user).subscribe(
         (response: User) => {
           this.showLoading = false;
-          this.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.firstName}.
-          Please check your email for password to log in.`);
+          this.sendNotification(NotificationType.SUCCESS, `Un nouveau compte a bien été créé pour ${response.firstName}.`);
+          this.router.navigateByUrl("/login");
         },
         (errorResponse: HttpErrorResponse) => {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);

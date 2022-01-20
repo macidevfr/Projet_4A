@@ -1,47 +1,103 @@
 <div id="main" class="container-fluid">
-    <header>
-        <div class="px-3 py-2 ">
-          <div class="container-fluid">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start ">
-              <a routerLink="/accueil" class="fs-1 fw-bold mr-lg-auto my-lg-0 text-white text-decoration-none">
-                ToSucceed
-              </a>
-              <ul [ngStyle]="{width : isLoggedIn? '35%' : '16%'}"
-                class="nav col-12 col-lg-auto my-2 justify-content-between my-md-0 text-small align-items-center">
-                <li>
-                  <a routerLink="/accueil" href="#" class="nav-link  d-flex flex-column align-items-center">
+  <header>
+    <div>
+      <div id="barre" class="container-fluid py-2">
+        <div class="d-flex flex-wrap justify-content-between justify-content-lg-start ">
+          
+          <a routerLink="/accueil" class=" align-items-center fs-1 fw-bold my-lg-0 text-white col-xl-6 col-9 text-decoration-none">
+            ToSucceed
+          </a>
+          <div class="pos-f-t col-xl-6 col-3 d-flex  justify-content-end">
+            
+          <nav class="nav  my-2 justify-content-between my-md-0 text-small align-items-center flex-row">
+            
+            <li *ngIf="isLoggedIn">
+                <a routerLink="/accueil" href="#" class="nav-link  d-flex flex-column align-items-center">
                     <i class="fa fa-home fa-2x"></i>
-                    Home
-                  </a>
-                </li>
-                
-                <li *ngIf="isLoggedIn" >
-                  <a routerLink="/message" href="#" class="nav-link  d-flex flex-column align-items-center">
+                    Accueil
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a routerLink="/cours" href="#" class="nav-link  d-flex flex-column align-items-center">
+                    <i class="fas fa-book fa-2x"></i>
+                    Cours
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a routerLink="/message" class="nav-link d-flex flex-column justify-content-center align-items-center">
                     <i class="fas fa-envelope fa-2x"></i>
-                    Messages
-                  </a>
-                </li>
-                <li *ngIf="isLoggedIn">
-                  <a routerLink="/user/management" href="#" class="nav-link  d-flex flex-column align-items-center">
-                    <i class="fas fa-user-friends fa-2x"></i>
-                    Users
-                  </a>
-                </li>
-    
-                <li>
-                  <a *ngIf="!isLoggedIn" routerLink="/login" class="btn btn-lg btn-primary text-white">Login</a>
-                  <a *ngIf="isLoggedIn"(click)="onLogOut()" routerLink="/accueil" class="btn btn-lg btn-danger">Logout</a>
+                    Messages 
+                </a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a routerLink="/user/management" href="#" class="nav-link  d-flex flex-column align-items-center">
+                    <i  class="fas fa-user-friends fa-2x"></i>
+                    Profil
+                </a>
+            </li>
+            
+            <li class="ml-4">
+                <a *ngIf="!isLoggedIn" routerLink="/login" class="btn btn-lg btn-primary text-white">Login</a>
+                <a *ngIf="isLoggedIn"(click)="onLogOut()" routerLink="/accueil" class="btn btn-lg btn-danger">Logout</a>
 
-              </li>
-    
-              </ul>
-            </div>
+            </li>
+
+           
+           
+          </nav>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i style="color: white;" class="fas fa-bars"></i>                
+          </button>
+          
+          
           </div>
         </div>
-    
+      </div>
 
-      </header>
-      <div class="container-fluid d-flex flex-column my-2  bg-light p-4">
+      <div class="collapse" id="navbarToggleExternalContent">
+        <div class="d-flex justify-content-end">
+        <div id="navbartoggle" class="d-flex justify-content-center w-100 p-4">
+          <nav class="nav d-flex flex-row w-100 my-2 justify-content-start my-md-0 text-small align-items-center">
+            <li class="col-4" *ngIf="isLoggedIn">
+                <a routerLink="/accueil" href="#" class="nav-link d-flex flex-column align-items-center">
+                    <i class="fa fa-home fa-2x"></i>
+                    Accueil
+                </a>
+            </li>
+            <li class="col-4" *ngIf="isLoggedIn">
+                <a routerLink="/cours" href="#" class="nav-link  d-flex flex-column align-items-center">
+                    <i class="fas fa-book fa-2x"></i>
+                    Cours
+                </a>
+            </li>
+            <li class="col-4" *ngIf="isLoggedIn">
+                <a routerLink="/message" class="nav-link text-center d-flex flex-column align-items-center">
+                    <i class="fas fa-envelope fa-2x"></i>
+                    Messages 
+                </a>
+            </li>
+            <li class="col-4" *ngIf="isLoggedIn">
+                <a routerLink="/user/management" href="#" class="nav-link d-flex flex-column align-items-center">
+                    <i  class="fas fa-user-friends fa-2x"></i>
+                     Profil
+                </a>
+            </li>
+            
+            <li class="col-8">
+                <a *ngIf="!isLoggedIn" routerLink="/login" class="btn btn-lg btn-primary text-white ">Login</a>
+                <a *ngIf="isLoggedIn"(click)="onLogOut()" routerLink="/accueil" class="btn btn-lg btn-danger">Logout</a>
+
+            </li>
+            
+           
+          </nav>
+        </div>
+        </div>
+      </div>
+    </div>
+    
+  </header> 
+      <div class="container-fluid d-flex flex-column bg-light p-4">
           <div class="d-flex flex-row justify-content-between">
           <div >
             <h3 class="text-decoration-underline ">Découvrez tous les cours disponibles !</h3>
@@ -49,15 +105,15 @@
             <h5 class="font-italic">{{filteredCours?.length}} cours trouvé(s)</h5>
           </div>
           <div *ngIf="isLoggedIn" [hidden]="!isAdminOrManager">
-            <button  type="button" class="btn btn-info" data-toggle="modal"
+            <button  type="button" class="btn btn-info mx-3" data-toggle="modal"
             data-target="#addCoursModal">
             <i class="fa fa-plus"></i> Nouveau cours
             </button>
           </div>
           
         </div>
-            <div class="d-flex justify-content-start my-3">
-              <div class="container rounded-0 mr-3 h-100 col-2 p-3 ml-0">
+            <div class="d-flex row justify-content-lg-start justify-content-center my-3">
+              <div class="container rounded-0 mr-lg-5 h-100 col-12 col-lg-2 p-3 ml-0 mb-5">
                 <p class="font-weight-light text-decoration-underline">Sélectionnez le niveau souhaité</p>
                     <div class="ml-3 row d-flex ">
                         <div class="custom-control custom-checkbox col-5">
@@ -87,7 +143,10 @@
                             <input type="checkbox" [(ngModel)]="filter.FRANCAIS" (ngModelChange)="filterChange()" class="custom-control-input" id="customCheck12">
                             <label class="custom-control-label" for="customCheck12">FRANCAIS</label>
                         </div>
-                        
+                        <div class="custom-control custom-checkbox col-5">
+                          <input type="checkbox" [(ngModel)]="filter.ANGLAIS" (ngModelChange)="filterChange()" class="custom-control-input" id="customCheck13">
+                          <label class="custom-control-label" for="customCheck13">ANGLAIS</label>
+                      </div>
                         
                                     
                         
@@ -95,40 +154,50 @@
 
                   
               </div>
-              <div class="col-9 d-flex row">
-                  <tbody class=" mb-5" *ngFor="let cours of filteredCours;let indexOfelement=index;">
-                      <div class="container d-flex flex-row py-3 al">
-                        <div class="col-3">
-                            <img style="width: 200px; height: 200px;" src="{{cours?.coursImageUrl}}" alt="">
+              <div class="col-12 col-lg-9 row d-flex px-0 d-lg-flex ml-lg-5">
+                  <tbody class=" mb-5 d-flex justify-content-center" *ngFor="let cours of filteredCours;let indexOfelement=index;">
+                      <div class="container d-flex row py-3 pr-lg-0">
+                        <div class="d-flex col-12 col-lg-3 align-items-center mb-lg-0 mb-5">
+                            <img style="width: 200px; height: 200px;" src="{{cours?.coursImageUrl}}" alt="" class="mx-auto">
                         </div>
-                        <div class="pl-4 ml-4 d-flex align-items-start flex-column col-3">
+                        <div class="pl-4 d-flex align-items-start flex-column col-lg-3 mb-lg-0 mb-5">
                         <h2 class="text-uppercase text-decoration-underline">{{cours?.nom}}</h2><br>
                         Niveau : {{cours?.niveau}} <br>
                         Matiere : {{cours?.matiere}} <br>
                         Professeur : {{cours?.user.firstName}} {{cours?.user.lastName}} 
                       </div>
                       
-                      <div class=" pl-4 ml-4 d-flex flex-column justify-content-between col-5  border-left border-aqua border-right">
+                      <div class="col-10 pl-lg-4 pb-lg-0 d-flex flex-column justify-content-between col-lg-5 border-left border-aqua mb-lg-0 border-right">
                         <div>
                           <h3>Description du cours :</h3>
                           <h5>{{cours?.description}}</h5>
                         </div>
+                        <div class="row">
+                        <div class="col-lg-6">
                         <div>
                         <h5>Note : {{calHandle(indexOfelement) }} <i class="fas fa-star"></i> </h5>
                       
-                        <button class="btn-info btn-sm" type="button" (click)="onSelectUser(cours)">
+                        <button class="btn-info btn-sm mt-3 mt-lg-0 mb-3 mb-lg-0" type="button" (click)="onSelectUser(cours)">
                           Rédiger un avis
                         </button>
                         </div>
                         <button [hidden]="true" type="button" id="addAvis" data-toggle="modal" data-target="#addAvisModal">
                         </button>
                       </div>
-                      <div class="p-2">
-                        <button [hidden]="!isAdmin" class="btn btn-outline-danger float-right mx-auto"
+                      <div *ngIf="user.abonnement!=null" class="col-lg-5 d-flex align-content-end">
+                        <button class="btn-info btn-sm" type="button">
+                          <i class="fas fa-eye"></i> Voir le cours 
+                        </button>
+
+                      </div>
+                      </div>
+                    </div>
+
+                      <div class="px-2 col-lg-1 d-flex justify-content-end justify-content-lg-center col-2 align-items-end align-items-lg-start">
+                        <button [hidden]="!isAdmin" class="btn btn-outline-danger float-right h-25"
                         (click)="onDeleteCours(cours.id)"><i class="fas fa-trash"></i></button>
                       </div>
                     </div>
-                      
                   </tbody>
               </div>
           </div>
@@ -174,6 +243,8 @@
                     <select name="matiere" required ngModel="MATHS" class="form-control">
                       <option value="MATHS">MATHS</option>
                       <option value="FRANCAIS">FRANCAIS</option> 
+                      <option value="ANGLAIS">ANGLAIS</option> 
+
                     </select>
                 </div>
                   <div class="custom-file">

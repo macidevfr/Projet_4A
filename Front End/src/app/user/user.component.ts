@@ -34,6 +34,7 @@ export class UserComponent implements OnInit, OnDestroy {
   public fileStatus = new FileUploadStatus();
   public selectedUsers: User[];
   public filteredUsers: User[];
+  filter = { CP: true, CE1: true, CE2: true};
 
   dropdownSettings = {};
 
@@ -43,6 +44,8 @@ export class UserComponent implements OnInit, OnDestroy {
               private userService: UserService, private notificationService: NotificationService) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     this.user = this.authenticationService.getUserFromLocalCache();
     this.getUsers(true);
 
@@ -60,14 +63,14 @@ export class UserComponent implements OnInit, OnDestroy {
 
   }
   onItemSelect(item: any) {
-    console.log('reactive form value ', this.selectedUsers);
-    console.log('Actual data ', this.getObjectListFromData(this.selectedUsers.map(item => item.userId)));
+    /* console.log('reactive form value ', this.selectedUsers);
+    console.log('Actual data ', this.getObjectListFromData(this.selectedUsers.map(item => item.userId))); */
     this.filteredUsers = this.getObjectListFromData(this.selectedUsers.map(item => item.userId));
   }
 
   onItemDeselect(item: any) {
-    console.log('reactive form value ', this.selectedUsers);
-    console.log('Actual data ', this.getObjectListFromData(this.selectedUsers.map(item => item.userId)));
+    /* console.log('reactive form value ', this.selectedUsers);
+    console.log('Actual data ', this.getObjectListFromData(this.selectedUsers.map(item => item.userId))); */
     this.filteredUsers = this.getObjectListFromData(this.selectedUsers.map(item => item.userId));
   }
 
@@ -82,7 +85,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   onSelectAll(items: any) {
      
-    console.log(items);
+    //console.log(items);
     this.filteredUsers = this.users;
 
   }
@@ -104,7 +107,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.userService.getUsers().subscribe(
         (response: User[]) => {
-          this.userService.addUsersToLocalCache(response);
           this.users = response;
           this.filteredUsers=response;
 
@@ -138,7 +140,7 @@ export class UserComponent implements OnInit, OnDestroy {
   
 
   public onAddNewUser(userForm: NgForm): void {
-    const formData = this.userService.createUserFormData(null, userForm.value, this.profileImage);
+    const formData = this.userService.createUserFormData(this.user, userForm.value, this.profileImage);
     this.subscriptions.push(
       this.userService.addUser(formData).subscribe(
         (response: User) => {
@@ -147,7 +149,7 @@ export class UserComponent implements OnInit, OnDestroy {
           this.fileName = null;
           this.profileImage = null;
           userForm.reset();
-          this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} ajouté avec uccès`);
+          this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} ajouté avec succès`);
         },
         (errorResponse: HttpErrorResponse) => {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -239,10 +241,17 @@ export class UserComponent implements OnInit, OnDestroy {
     this.clickButton('profile-image-input');
   }
 
-  public onLogOut(): void {
+  public onLogOut(){
+    const formData = this.authenticationService.createLogoutFormData(this.user.username);
+
+    this.authenticationService.logout(formData).subscribe(
+      (Response : User) =>{
+        
+      }
+    );
     this.authenticationService.logOut();
-    this.router.navigate(['/login']);
-    this.sendNotification(NotificationType.SUCCESS, `Vous avez été déconnecté.`);
+    this.router.navigateByUrl("/login");
+    this.sendNotification(NotificationType.SUCCESS, `Vous avez été déconnecté correctement.`);
   }
 
   public onResetPassword(emailForm: NgForm): void {
@@ -285,7 +294,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   public searchUsers(searchTerm: string): void {
     const results: User[] = [];
-    for (const user of this.userService.getUsersFromLocalCache()) {
+    for (const user of this.users) {
       if (user.firstName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
           user.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
           user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 ||
@@ -293,10 +302,8 @@ export class UserComponent implements OnInit, OnDestroy {
           results.push(user);
       }
     }
-    this.users = results;
-    if (results.length === 0 || !searchTerm) {
-      this.users = this.userService.getUsersFromLocalCache();
-    }
+    this.filteredUsers = results;
+    
   }
 
   public get isAdmin(): boolean {
@@ -325,6 +332,14 @@ export class UserComponent implements OnInit, OnDestroy {
 
   private clickButton(buttonId: string): void {
     document.getElementById(buttonId).click();
+  }
+
+  filterChange() {
+    this.filteredUsers = this.users.filter(x => 
+       ((x.role === 'ROLE_ELEVE' && this.filter.CP)
+       || (x.role === 'ROLE_MANAGER' && this.filter.CE1)
+       || (x.role === 'ROLE_SUPER_ADMIN' && this.filter.CE2))
+      );
   }
 
   ngOnDestroy(): void {

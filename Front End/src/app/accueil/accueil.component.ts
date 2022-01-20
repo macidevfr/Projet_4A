@@ -37,6 +37,8 @@ export class AccueilComponent implements OnInit {
     private userService: UserService, private notificationService: NotificationService, private messagedujourService : MessagedujourService, private messageService : MessageService) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0)
+
     this.user = this.authenticationService.getUserFromLocalCache();
 
     this.getMessagesdujour(false); 
@@ -50,16 +52,13 @@ export class AccueilComponent implements OnInit {
     this.subscriptions.push(
       this.messageService.getMessagesByUser(this.user.username).subscribe(
         (response : any) => {
-          this.messageService.addMessagesToLocalCache(response);
           this.messagesalire = response;
-          console.log(this.messagesalire);
           let messagesnotreaden = this.messagesalire.filter(x=>x.expediteur.username!==this.user.username);   
             messagesnotreaden.forEach(element => {
               if (element.readen===false){
                 msg+=1;
               }    
             })
-            console.log(msg);
             this.msgs = msg;
           this.refreshing = false;
           
@@ -79,7 +78,6 @@ export class AccueilComponent implements OnInit {
     this.subscriptions.push(
       this.messagedujourService.getMessagedujour().subscribe(
         (response: Messagedujour[]) => {
-          this.messagedujourService.addMessagedujourToLocalCache(response);
           this.messages = response;
           this.messagedujour = this.messages[Math.floor(Math.random() * this.messages.length)];
 
@@ -121,6 +119,13 @@ export class AccueilComponent implements OnInit {
     return this.authenticationService.getUserFromLocalCache().role;
   }
   public onLogOut(){
+    const formData = this.authenticationService.createLogoutFormData(this.user.username);
+
+    this.authenticationService.logout(formData).subscribe(
+      (Response : User) =>{
+        
+      }
+    );
     this.authenticationService.logOut();
     this.router.navigateByUrl("/login");
     this.sendNotification(NotificationType.SUCCESS, `Vous avez été déconnecté correctement.`);
@@ -135,7 +140,11 @@ export class AccueilComponent implements OnInit {
   }
 
   public saveNewMessage(): void {
-    this.clickButton('new-user-save');
+    this.clickButton('new-messagedujour-save');
+  }
+
+  public saveNewContact(): void {
+    this.clickButton('new-contact-save');
   }
   private clickButton(buttonId: string): void {
     document.getElementById(buttonId).click();
@@ -146,10 +155,27 @@ export class AccueilComponent implements OnInit {
     this.subscriptions.push(
       this.messagedujourService.addMessagedujour(formData).subscribe(
         (response: Messagedujour) => {
-          this.clickButton('new-user-close');
+          this.clickButton('new-messagedujour-close');
           this.getMessagesdujour(false);
           messageForm.reset();
           this.sendNotification(NotificationType.SUCCESS, `Message ajouté avec succès`);
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        }
+      )
+      );
+  }
+
+  public onContact(messageForm: NgForm): void {
+    const formData = this.messageService.createMessageFormData(this.user.username,"MACI",messageForm.value);
+    this.subscriptions.push(
+      this.messageService.addMessage(formData).subscribe(
+        (response: Message) => {
+          this.clickButton('new-contact-close');
+          this.getMessages(false);
+          messageForm.reset();
+          this.sendNotification(NotificationType.SUCCESS, `Message envoyé avec succès`);
         },
         (errorResponse: HttpErrorResponse) => {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
